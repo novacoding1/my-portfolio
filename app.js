@@ -626,53 +626,58 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get absolute URL of the PDF for Google Docs Viewer
     const absolutePdfUrl = `${window.location.origin}${window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))}/${item.pdfPath}`;
 
-    if (isMobile) {
-      // Create a stunning premium mobile preview container
-      container.style.height = 'auto';
-      container.style.padding = '45px 24px';
-      container.style.display = 'flex';
-      container.style.flexDirection = 'column';
-      container.style.alignItems = 'center';
-      container.style.justifyContent = 'center';
-      container.style.textAlign = 'center';
-      container.style.gap = '25px';
-      container.style.background = `linear-gradient(135deg, var(--bg-glass) 0%, rgba(255, 255, 255, 0.02) 100%)`;
-      container.style.border = '1px solid var(--border-glass)';
-      container.style.boxShadow = 'var(--shadow-glass)';
-      
-      container.innerHTML = `
-        <div class="mobile-pdf-preview" style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 400px; margin: 0 auto;">
-          <div class="pdf-glow-badge" style="width: 90px; height: 90px; border-radius: 24px; background: ${item.color}; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px ${item.glow}; animation: float 3s infinite ease-in-out; position: relative;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="none" stroke="#ffffff" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-          </div>
-          
-          <div style="margin-top: 5px;">
-            <h3 style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">${item.title}</h3>
-            <span style="font-size: 0.72rem; text-transform: uppercase; color: ${item.btnColor}; font-weight: 800; letter-spacing: 1.5px; display: block; margin-bottom: 12px;">PDF құжаты</span>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 320px; margin: 0 auto;">
-              Бұл материалды мобильді құрылғыңызда толық және өте ыңғайлы форматта оқу үшін төмендегі батырма арқылы ашыңыз.
-            </p>
-          </div>
-          
-          <a href="${item.pdfPath}" target="_blank" class="deck-download-btn" style="background: ${item.color}; box-shadow: 0 8px 25px ${item.glow}; margin-top: 10px; display: inline-flex; text-decoration: none; padding: 16px 32px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-md); gap: 12px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.15);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#ffffff" stroke-width="2.5" viewBox="0 0 24 24">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <span style="color:#ffffff;">Құжатты толық ашу</span>
-          </a>
-        </div>
-      `;
-    } else if (isProduction) {
-      // On desktop production, update iframe to use Google Docs Viewer for extremely smooth interactive embedding!
+    if (isProduction) {
+      // On production (github.io), ALWAYS use Google Docs Viewer so the PDF renders directly on screen on BOTH mobile and desktop!
       iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(absolutePdfUrl)}&embedded=true`;
+    } else {
+      // Local development fallback
+      if (isMobile) {
+        // Create a stunning premium mobile preview container
+        container.style.height = 'auto';
+        container.style.padding = '45px 24px';
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.alignItems = 'center';
+        container.style.justifyContent = 'center';
+        container.style.textAlign = 'center';
+        container.style.gap = '25px';
+        container.style.background = `linear-gradient(135deg, var(--bg-glass) 0%, rgba(255, 255, 255, 0.02) 100%)`;
+        container.style.border = '1px solid var(--border-glass)';
+        container.style.boxShadow = 'var(--shadow-glass)';
+        
+        container.innerHTML = `
+          <div class="mobile-pdf-preview" style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 400px; margin: 0 auto;">
+            <div class="pdf-glow-badge" style="width: 90px; height: 90px; border-radius: 24px; background: ${item.color}; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px ${item.glow}; animation: float 3s infinite ease-in-out; position: relative;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="none" stroke="#ffffff" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            
+            <div style="margin-top: 5px;">
+              <h3 style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">${item.title}</h3>
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: ${item.btnColor}; font-weight: 800; letter-spacing: 1.5px; display: block; margin-bottom: 12px;">PDF құжаты</span>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; max-width: 320px; margin: 0 auto;">
+                Бұл материалды мобильді құрылғыңызда толық және өте ыңғайлы форматта оқу үшін төмендегі батырма арқылы ашыңыз.
+              </p>
+            </div>
+            
+            <a href="${item.pdfPath}" target="_blank" class="deck-download-btn" style="background: ${item.color}; box-shadow: 0 8px 25px ${item.glow}; margin-top: 10px; display: inline-flex; text-decoration: none; padding: 16px 32px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-md); gap: 12px; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,0.15);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#ffffff" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span style="color:#ffffff;">Құжатты толық ашу</span>
+            </a>
+          </div>
+        `;
+      } else {
+        iframe.src = item.pdfPath;
+      }
     }
   });
 
